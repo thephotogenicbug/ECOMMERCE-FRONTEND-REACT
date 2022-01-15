@@ -11,7 +11,7 @@ import {
 
 // Get Products
 export const getProduct =
-  (keyword = "", currentPage = 1, price=[0, 25000]) =>
+  (keyword = "", currentPage = 1, price = [0, 25000], category) =>
   async (dispatch) => {
     try {
       dispatch({
@@ -19,6 +19,10 @@ export const getProduct =
       });
 
       let link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}`;
+
+      if (category) {
+        link = `http://localhost:4000/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}`;
+      }
 
       const { data } = await axios.get(link);
       dispatch({
