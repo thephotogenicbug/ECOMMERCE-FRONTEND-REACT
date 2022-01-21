@@ -4,13 +4,14 @@ import Loader from "../layout/Loader/Loader";
 import { MdFace, MdLockOpen, MdMailOutline } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, login } from "../../actions/userAction";
+import { clearErrors, login, register } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 
 
 const LoginSignup = () => {
   const dispatch = useDispatch();
   const alert = useAlert();
+  let navigate = useNavigate()
 
   const { error, loading, isAuthenticated } = useSelector(
     (state) => state.user
@@ -48,7 +49,7 @@ const LoginSignup = () => {
     myForm.set("email", email);
     myForm.set("password", password);
     myForm.set("avatar", avatar);
-    console.log("Signup Form Submitted");
+    dispatch(register(myForm));
   };
 
   const registerDateChange = (e) => {
@@ -72,7 +73,10 @@ const LoginSignup = () => {
       alert.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, error, alert]);
+    if(isAuthenticated){
+      navigate("/products");
+    }
+  }, [dispatch, error, alert, isAuthenticated]);
 
   const switchTabs = (e, tab) => {
     if (tab === "login") {
